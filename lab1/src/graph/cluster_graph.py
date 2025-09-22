@@ -43,10 +43,10 @@ class ClusterGraph:
         for node in self.graph.nodes():
             colors.append(self.partition[node])
 
-        plt.figure(figsize=(12, 12))
+        plt.figure(figsize=(20, 20))
         pos = nx.spring_layout(self.graph)
         nx.draw_networkx_nodes(self.graph, pos, node_color=colors, cmap=plt.cm.rainbow, node_size=50, alpha=0.7)
-        nx.draw_networkx_labels(self.graph, pos, font_size=8, font_color='black')
+        nx.draw_networkx_labels(self.graph, pos, font_size=7, font_color='black')
         nx.draw_networkx_edges(self.graph, pos, width=0.5, alpha=0.5, edge_color='gray')
         plt.title(f"Граф кластеризации ключевых слов")
         plt.show()
