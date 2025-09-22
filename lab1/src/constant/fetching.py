@@ -1,0 +1,2 @@
+RESULTS: int = 250
+BATCH_SIZE: int = 50

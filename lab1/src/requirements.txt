@@ -1,0 +1,17 @@
+feedparser
+pandas
+fastparquet
+beautifulsoup4
+pypdf2
+pdfplumber
+requests
+certifi
+yake
+networkx
+matplotlib
+scipy
+seaborn
+textblob
+stanza
+cosmograph
+python-louvain
