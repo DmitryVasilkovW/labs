@@ -1,6 +1,7 @@
 import networkx as nx
 from matplotlib import pyplot as plt
 
+from lab1.src.constant.fetching import TITLE, AUTHORS, SUMMARY, KEYWORDS
 from lab1.src.pages.pages_processor import PagesProcessor
 
 
@@ -15,20 +16,20 @@ class PublicationsGraph:
         for i, row in self.pages_processor.iterate():
             self.graph.add_node(
                 i,
-                title=row['title'],
-                authors=row['authors'],
-                summary=row['summary'],
+                title=row[TITLE],
+                authors=row[AUTHORS],
+                summary=row[SUMMARY],
             )
 
     def __init_edges(self):
         for i, row in self.pages_processor.iterate():
-            keywords = set(row['keywords'])
+            keywords = set(row[KEYWORDS])
             for j, other_row in self.pages_processor.iterate():
                 self.__add_edge_if_not_common(i, j, keywords, other_row)
 
     def __add_edge_if_not_common(self, first_index, second_index, keywords, other_row):
         if first_index != second_index:
-            other_keywords = set(other_row['keywords'])
+            other_keywords = set(other_row[KEYWORDS])
             common_keywords = keywords.intersection(other_keywords)
             if common_keywords:
                 weight = len(common_keywords)
@@ -36,10 +37,10 @@ class PublicationsGraph:
 
     def find_neighbors(self, publication: int):
         neighbors = list(self.graph.neighbors(publication))
-        publication_title = self.graph.nodes[publication]['title']
+        publication_title = self.graph.nodes[publication][TITLE]
         titles = []
         for n in neighbors:
-            title = self.graph.nodes[n]['title']
+            title = self.graph.nodes[n][TITLE]
             titles.append((n, title))
         return {
             "publication": publication,
