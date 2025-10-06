@@ -7,7 +7,7 @@ import io
 import pdfplumber
 
 from lab1.src.constant.arxiv import BASE_URL, CATEGORY
-from lab1.src.constant.fetching import BATCH_SIZE, RESULTS
+from lab1.src.constant.fetching import BATCH_SIZE, RESULTS, AUTHORS, SUMMARY, TITLE, KEYWORDS
 
 
 class ArxivFetcher:
@@ -68,10 +68,10 @@ class ArxivFetcher:
             authors.append(author.name)
 
         return {
-            "title": entry.title,
-            "authors": authors,
-            "summary": entry.summary,
-            "keywords": keywords,
+            TITLE: entry.title,
+            AUTHORS: authors,
+            SUMMARY: entry.summary,
+            KEYWORDS: keywords,
         }
 
     @classmethod

@@ -39,9 +39,14 @@ class PublicationsGraph:
         neighbors = list(self.graph.neighbors(publication))
         publication_title = self.graph.nodes[publication][TITLE]
         titles = []
+
         for n in neighbors:
             title = self.graph.nodes[n][TITLE]
-            titles.append((n, title))
+            similarity = self.graph[publication][n]['weight']
+            titles.append((n, title, similarity))
+
+        titles.sort(key=lambda x: x[2], reverse=True)
+
         return {
             "publication": publication,
             "publication_title": publication_title,

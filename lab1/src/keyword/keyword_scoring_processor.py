@@ -1,5 +1,7 @@
 import networkx as nx
 
+from lab1.src.constant.fetching import KEYWORDS
+
 
 class KeywordScoringProcessor:
     def __init__(self, cluster_graph):
@@ -27,7 +29,7 @@ class KeywordScoringProcessor:
         print(f"Топ {count} наборов ключевых слов по {scoring_method}:")
         it = count
         for node, centrality in self.__sort_scoring_result(result)[:count]:
-            print(f"{self.cluster_graph.nodes[node]['title']}: {centrality:.4f}")
+            print(f"{self.cluster_graph.nodes[node][KEYWORDS]}: {centrality:.4f}")
             it -= 1
             if it == 0:
                 break

@@ -2,6 +2,8 @@ import itertools
 import pandas as pd
 import networkx as nx
 from cosmograph import cosmo
+
+from lab1.src.constant.fetching import TITLE, KEYWORDS
 from lab1.src.pages.pages_processor import PagesProcessor
 
 
@@ -19,8 +21,8 @@ class LinksGraph:
         all_keywords = []
 
         for _, row in df.iterrows():
-            title = row["title"]
-            keywords = row["keywords"]
+            title = row[TITLE]
+            keywords = row[KEYWORDS]
             if not keywords:
                 continue
             for kw in keywords:

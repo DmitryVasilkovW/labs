@@ -2,6 +2,8 @@ import networkx as nx
 import community as community_louvain
 from matplotlib import pyplot as plt
 
+from lab1.src.constant.fetching import KEYWORDS
+
 
 class ClusterGraph:
     def __init__(self, edges, vertices):
@@ -18,7 +20,7 @@ class ClusterGraph:
 
     def __setup_vertices(self, vertices):
         for _, row in vertices.iterrows():
-            self.graph.add_node(row['id'], title=row['title'], count=row['count'])
+            self.graph.add_node(row['id'], keywords=row[KEYWORDS], count=row['count'])
 
     def show_info(self):
         plt.figure(figsize=(6, 1.5))
@@ -33,10 +35,11 @@ class ClusterGraph:
 
         info = {}
         for node, cluster in self.partition.items():
-            title = self.graph.nodes[node]['title']
-            info.setdefault(cluster, []).append(title)
+            words = self.graph.nodes[node][KEYWORDS]
+            info.setdefault(cluster, []).append(words)
         for cluster, keywords in info.items():
-            print(f"Кластер: {cluster}\nНекоторые ключевые слова: {', '.join(keywords[:1])}...")
+            print(f"Кластер: {cluster}\nНекоторые ключевые слова: {', '.join(keywords[:10])}...")
+
 
     def show(self):
         colors = []
