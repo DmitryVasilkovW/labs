@@ -1,5 +1,7 @@
 import json
 import os
+import pandas as pd
+from typing import Any
 
 
 class Cache:
@@ -48,17 +50,65 @@ class Cache:
 
     def set_object(self, key, value):
         self._load_data()
-        if hasattr(value, '__dict__'):
-            self.data[key] = value.__dict__
+
+        if isinstance(value, pd.DataFrame):
+            self.data[key] = self._dataframe_to_dict(value)
+        elif hasattr(value, '__dict__'):
+            self.data[key] = {
+                '__class__': value.__class__.__name__,
+                '__module__': value.__module__,
+                'data': value.__dict__
+            }
         else:
             self.data[key] = value
+
         self.save()
 
     def get_object(self, key, cls=None):
         self._load_data()
         data = self.data.get(key)
-        if cls and data and hasattr(cls, '__dict__'):
-            obj = cls()
-            obj.__dict__.update(data)
-            return obj
+
+        if data is None:
+            return None
+
+        if isinstance(data, dict):
+            if '__class__' in data and data['__class__'] == 'DataFrame':
+                return self._dataframe_from_dict(data)
+            elif '__class__' in data and cls:
+                obj = cls()
+                obj.__dict__.update(data['data'])
+                return obj
+
         return data
+
+    def _dataframe_to_dict(self, df: pd.DataFrame) -> dict:
+        """Преобразует DataFrame в словарь для сериализации"""
+        return {
+            '__class__': 'DataFrame',
+            'data': df.to_dict('records'),
+            'columns': list(df.columns),
+            'index': list(df.index) if df.index is not None else None,
+            'dtypes': {col: str(df[col].dtype) for col in df.columns}
+        }
+
+    def _dataframe_from_dict(self, data: dict) -> pd.DataFrame:
+        """Восстанавливает DataFrame из словаря"""
+        df = pd.DataFrame(data['data'], columns=data['columns'])
+
+        if data['index']:
+            df.index = data['index']
+
+        for col, dtype_str in data['dtypes'].items():
+            if col in df.columns:
+                try:
+                    df[col] = df[col].astype(dtype_str)
+                except (ValueError, TypeError):
+                    pass
+
+        return df
+
+    def set_dataframe(self, key, df: pd.DataFrame):
+        self.set_object(key, df)
+
+    def get_dataframe(self, key) -> pd.DataFrame:
+        return self.get_object(key)
