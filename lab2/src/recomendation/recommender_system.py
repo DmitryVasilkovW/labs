@@ -10,7 +10,6 @@ class RecommenderSystem:
         self.models = {}
 
     def most_popular(self, user_item_matrix, n_recommendations=4000):
-        """Улучшенный Most Popular - учитывает только товары из трейна"""
         if user_item_matrix.shape[1] == 0:
             return lambda user_id: []
 
@@ -27,7 +26,6 @@ class RecommenderSystem:
         return lambda user_id: popular_items
 
     def item_knn(self, user_item_matrix, n_neighbors=1500, n_recommendations=3000):
-        """ItemKNN - исправленная версия"""
         if user_item_matrix.shape[1] == 0:
             return lambda user_id: []
 
@@ -42,7 +40,6 @@ class RecommenderSystem:
             )
 
             def get_recommendations(user_id):
-                """Принимает user_id и возвращает рекомендации"""
                 if user_id not in user_item_matrix.index:
                     return []
 
@@ -71,7 +68,6 @@ class RecommenderSystem:
             return lambda user_id: []
 
     def als_recommendations(self, user_item_matrix, n_factors=1500, n_recommendations=3000):
-        """Исправленная версия ALS"""
         if user_item_matrix.shape[1] == 0 or user_item_matrix.shape[0] == 0:
             return lambda user_id: []
 
