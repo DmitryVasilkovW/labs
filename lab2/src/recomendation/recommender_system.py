@@ -9,7 +9,7 @@ class RecommenderSystem:
     def __init__(self):
         self.models = {}
 
-    def most_popular(self, user_item_matrix, n_recommendations=4000):
+    def most_popular(self, user_item_matrix, n_recommendations=1500):
         if user_item_matrix.shape[1] == 0:
             return lambda user_id: []
 
@@ -25,7 +25,7 @@ class RecommenderSystem:
 
         return lambda user_id: popular_items
 
-    def item_knn(self, user_item_matrix, n_neighbors=1500, n_recommendations=3000):
+    def item_knn(self, user_item_matrix, n_neighbors=1500, n_recommendations=1500):
         if user_item_matrix.shape[1] == 0:
             return lambda user_id: []
 
@@ -67,7 +67,7 @@ class RecommenderSystem:
             print(f"Ошибка в ItemKNN: {e}")
             return lambda user_id: []
 
-    def als_recommendations(self, user_item_matrix, n_factors=1500, n_recommendations=3000):
+    def als_recommendations(self, user_item_matrix, n_factors=1500, n_recommendations=1500):
         if user_item_matrix.shape[1] == 0 or user_item_matrix.shape[0] == 0:
             return lambda user_id: []
 
